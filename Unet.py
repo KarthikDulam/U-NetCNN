@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+# The double convulutions required by the architecture are being performed in the below method.
 def double_conv(in_c, out_c):
     conv = nn.Sequential(
         nn.Conv2d(in_c,out_c,kernel_size=3),
@@ -10,6 +11,7 @@ def double_conv(in_c, out_c):
     )
     return conv
 
+# This method crops the input image with the size required by the target_tensor based on the convolution level.
 def crop_img(tensor, target_tensor):
     target_size = target_tensor.size()[2]
     tensor_size = tensor.size()[2]
@@ -18,6 +20,11 @@ def crop_img(tensor, target_tensor):
 
     return tensor[:,:,delta:tensor_size-delta,delta:tensor_size-delta]
 
+# This Class holds the base implementation of the Unet model. Also, the upTranspose, down convolutions and 
+# Upconvolutions required by the model are implemented. The code can be further cleaned but for now, I have 
+# implemented the logical steps taken by the authors. Each of the convolution tasks are tagged with the 
+# naming convention of direction_operation_level
+# ex: up_trans_1 
 
 class UNet(nn.Module):
     def __init__(self):
